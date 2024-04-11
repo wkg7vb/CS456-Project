@@ -1,11 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class TimerGUI extends JFrame {
 
     private JLabel time;
     private JButton start, startOver, breakButton;
-
+    private Timer timer;
+    private int secondsLeft = 0;
     public TimerGUI() {
 
         setTitle("Study Timer");
@@ -25,6 +29,12 @@ public class TimerGUI extends JFrame {
         start.setSize(new Dimension(400, 200));
         JPanel buttonPane = new JPanel();
         buttonPane.add(start);
+
+        start.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                startWorkTimer();
+            }
+        });
 
         panel.add(buttonPane, BorderLayout.SOUTH);
 
@@ -66,6 +76,39 @@ public class TimerGUI extends JFrame {
         return menu;
     }
 
+    private void startWorkTimer(){
+        if (timer != null){
+            timer.cancel();
+        }
+
+        timer = new Timer();
+        secondsLeft = 25*60;
+        time.setText(formatTime(secondsLeft));
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                secondsLeft--;
+                if (secondsLeft >= 0) {
+                    time.setText(formatTime(secondsLeft));
+                } else {
+                    stopTimer();
+                }
+            }
+        }, 1000, 1000);
+    }
+
+    private void stopTimer(){
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+    }
+
+    private String formatTime(int seconds) {
+        int minutes = seconds / 60;
+        int remainingSeconds = seconds% 60;
+        return String.format("%02d:%02d", minutes, remainingSeconds);
+    }
 }
 
 // timer function from:
