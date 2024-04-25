@@ -91,6 +91,27 @@ public class TimerGUI extends JFrame {
                 if (secondsLeft >= 0) {
                     time.setText(formatTime(secondsLeft));
                 } else {
+                    startBreakTimer();
+                }
+            }
+        }, 1000, 1000);
+    }
+
+    private void startBreakTimer(){
+        if (timer != null){
+            timer.cancel();
+        }
+
+        timer = new Timer();
+        secondsLeft = 5*60;
+        time.setText(formatTime(secondsLeft));
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                secondsLeft--;
+                if (secondsLeft >= 0) {
+                    time.setText(formatTime(secondsLeft));
+                } else {
                     stopTimer();
                 }
             }
