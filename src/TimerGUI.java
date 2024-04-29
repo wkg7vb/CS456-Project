@@ -6,10 +6,14 @@ import java.util.TimerTask;
 
 public class TimerGUI extends JFrame {
 
+    private JPanel panel;
     private JLabel time;
     private JButton start, startOver, breakButton;
+    private JButton breakFlash;
     private Timer timer;
+    private javax.swing.Timer flashTimer;
     private int secondsLeft = 0;
+    private boolean flashWhite = true;
     public TimerGUI() {
 
         setTitle("Study Timer");
@@ -18,24 +22,43 @@ public class TimerGUI extends JFrame {
 
         //timer.schedule(new App(), 0, 1000);
 
-        JPanel panel = new JPanel(new BorderLayout());
+        panel = new JPanel(new BorderLayout());
+
+        flashTimer = new javax.swing.Timer(300, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                flashScreen();
+            }
+        });
 
         // adding elements to panel
-        time = new JLabel("25:00");
+        time = new JLabel("  25:00");
         time.setFont(new Font("Serif", Font.BOLD, 200));
         panel.add(time, BorderLayout.CENTER);
 
         start = new JButton("START");
         start.setSize(new Dimension(400, 200));
-        JPanel buttonPane = new JPanel();
-        buttonPane.add(start);
-
         start.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 startWorkTimer();
             }
         });
 
+        breakFlash = new JButton("STOP");
+        breakFlash.setSize(new Dimension(400, 200));
+        breakFlash.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                flashTimer.stop();
+                panel.setBackground(Color.WHITE);
+                breakFlash.setVisible(false);
+            }
+        });
+        breakFlash.setVisible(false);
+
+        JPanel buttonPane = new JPanel();
+        buttonPane.add(start);
+        buttonPane.add(breakFlash);
+        
         panel.add(buttonPane, BorderLayout.SOUTH);
 
         JPanel menu = getjPanel();
@@ -82,7 +105,7 @@ public class TimerGUI extends JFrame {
         }
 
         timer = new Timer();
-        secondsLeft = 25*60;
+        secondsLeft = 5; //CHANGED TO 5 SECONDS FOR TESTING
         time.setText(formatTime(secondsLeft));
 
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -101,13 +124,25 @@ public class TimerGUI extends JFrame {
         if (timer != null) {
             timer.cancel();
             timer = null;
+            flashTimer.start();
+            
         }
+    }
+
+    private void flashScreen() {
+        breakFlash.setVisible(true);
+        if (flashWhite) {
+            panel.setBackground(Color.RED);
+        } else {
+            panel.setBackground(Color.WHITE);
+        }
+        flashWhite = !flashWhite; 
     }
 
     private String formatTime(int seconds) {
         int minutes = seconds / 60;
         int remainingSeconds = seconds% 60;
-        return String.format("%02d:%02d", minutes, remainingSeconds);
+        return String.format("  %02d:%02d", minutes, remainingSeconds);
     }
 }
 
