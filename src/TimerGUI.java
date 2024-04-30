@@ -9,6 +9,7 @@ public class TimerGUI extends JFrame {
     private JPanel panel;
     private JLabel time;
     private JButton start, startOver, breakButton;
+    private JSpinner hourSpinner, minuteSpinner, secondSpinner;
     private JButton breakFlash;
     private Timer timer;
     private javax.swing.Timer flashTimer;
@@ -32,9 +33,13 @@ public class TimerGUI extends JFrame {
         });
 
         // adding elements to panel
-        time = new JLabel("  25:00");
+        time = new JLabel("  00:30");
         time.setFont(new Font("Serif", Font.BOLD, 200));
         panel.add(time, BorderLayout.CENTER);
+
+        hourSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 24, 1));
+        minuteSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 59, 1));
+        secondSpinner = new JSpinner(new SpinnerNumberModel(30, 0, 59, 1));
 
         start = new JButton("START");
         start.setSize(new Dimension(400, 200));
@@ -50,12 +55,20 @@ public class TimerGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 flashTimer.stop();
                 panel.setBackground(Color.WHITE);
-                breakFlash.setVisible(false);
+                breakFlash.setVisible(true);
+                stopTimer();
             }
         });
-        breakFlash.setVisible(false);
+        breakFlash.setVisible(true);
 
         JPanel buttonPane = new JPanel();
+        buttonPane.add(new JLabel("Set Time:"));
+        buttonPane.add(hourSpinner);
+        buttonPane.add(new JLabel("h"));
+        buttonPane.add(minuteSpinner);
+        buttonPane.add(new JLabel("m"));
+        buttonPane.add(secondSpinner);
+        buttonPane.add(new JLabel("s     "));
         buttonPane.add(start);
         buttonPane.add(breakFlash);
         
@@ -83,6 +96,9 @@ public class TimerGUI extends JFrame {
         var bellBtn = new JButton(bellIcon);
         var colorBtn = new JButton(colorIcon);
         var pictureBtn = new JButton(pictureIcon);
+        var timerValue = new JTextField("25:00");
+        timerValue.setPreferredSize(new Dimension(100,10));
+        var timerReset = new JButton("Reset");
 
         JPanel menu = new JPanel();
         menu.add(new JSeparator());
@@ -93,7 +109,7 @@ public class TimerGUI extends JFrame {
         menu.add(colorBtn);
         menu.add(new JSeparator());
         menu.add(pictureBtn);
-        menu.add(new JSeparator());
+        menu.add(new JSeparator());      
 
         menu.setLayout(new BoxLayout(menu, BoxLayout.Y_AXIS));
         return menu;
@@ -105,7 +121,9 @@ public class TimerGUI extends JFrame {
         }
 
         timer = new Timer();
-        secondsLeft = 5; //CHANGED TO 5 SECONDS FOR TESTING
+        secondsLeft = (((Integer) hourSpinner.getValue()) * 3600)
+            + (((Integer) minuteSpinner.getValue()) * 60) 
+            + (((Integer) secondSpinner.getValue()))  ; //CHANGED TO 5 SECONDS FOR TESTING
         time.setText(formatTime(secondsLeft));
 
         timer.scheduleAtFixedRate(new TimerTask() {
