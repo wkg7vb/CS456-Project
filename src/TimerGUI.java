@@ -3,6 +3,9 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.io.File;
+import javax.sound.sampled.*;
+
 
 public class TimerGUI extends JFrame {
 
@@ -11,10 +14,12 @@ public class TimerGUI extends JFrame {
     private JButton start, startOver, breakButton;
     private JSpinner hourSpinner, minuteSpinner, secondSpinner;
     private JButton breakFlash;
+    private Clip clip;
     private Timer timer;
     private javax.swing.Timer flashTimer;
     private int secondsLeft = 0;
     private boolean flashWhite = true;
+    private static boolean playSound = false;
     public TimerGUI() {
 
         setTitle("Study Timer");
@@ -40,6 +45,8 @@ public class TimerGUI extends JFrame {
         hourSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 24, 1));
         minuteSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 59, 1));
         secondSpinner = new JSpinner(new SpinnerNumberModel(30, 0, 59, 1));
+
+        
 
         start = new JButton("START");
         start.setSize(new Dimension(400, 200));
@@ -92,9 +99,30 @@ public class TimerGUI extends JFrame {
         var colorIcon = new ImageIcon(new ImageIcon("src/color.png").getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
         var pictureIcon = new ImageIcon(new ImageIcon("src/picture.png").getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
 
-        var soundBtn = new JButton(soundIcon);
-        var bellBtn = new JButton(bellIcon);
+        var soundBtn = new JButton(bellIcon);
+        soundBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (playSound)
+                {
+                    soundBtn.setIcon(bellIcon);
+                    playSound = false;
+                }
+                else
+                {
+                    soundBtn.setIcon(soundIcon);
+                    playSound = true;
+                }
+
+            }
+        });
+        //var bellBtn = new JButton(bellIcon);
         var colorBtn = new JButton(colorIcon);
+        /*colorBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+
+            }
+        });*/
         var pictureBtn = new JButton(pictureIcon);
         var timerValue = new JTextField("25:00");
         timerValue.setPreferredSize(new Dimension(100,10));
@@ -104,8 +132,8 @@ public class TimerGUI extends JFrame {
         menu.add(new JSeparator());
         menu.add(soundBtn);
         menu.add(new JSeparator());
-        menu.add(bellBtn);
-        menu.add(new JSeparator());
+        //menu.add(bellBtn);
+        //menu.add(new JSeparator());
         menu.add(colorBtn);
         menu.add(new JSeparator());
         menu.add(pictureBtn);
@@ -133,6 +161,7 @@ public class TimerGUI extends JFrame {
                     time.setText(formatTime(secondsLeft));
                 } else {
                     stopTimer();
+                    playSound();
                 }
             }
         }, 1000, 1000);
@@ -156,6 +185,37 @@ public class TimerGUI extends JFrame {
         }
         flashWhite = !flashWhite; 
     }
+    
+
+    private void playSound()
+    {
+        if (playSound)
+        {
+            try
+            {
+                clip = (Clip)AudioSystem.getLine(new Line.Info(Clip.class));
+        
+                clip.addLineListener(new LineListener()
+                {
+                    @Override
+                    public void update(LineEvent event)
+                    {
+                        if (event.getType() == LineEvent.Type.STOP)
+                            clip.close();
+                    }
+                });
+                
+                var soundFile = new File("src/alarm.wav");
+        
+                clip.open(AudioSystem.getAudioInputStream(soundFile));
+                clip.start();
+            }
+            catch (Exception exc)
+            {
+                exc.printStackTrace(System.out);
+            }
+        }
+    }
 
     private String formatTime(int seconds) {
         int minutes = seconds / 60;
@@ -166,3 +226,7 @@ public class TimerGUI extends JFrame {
 
 // timer function from:
 // https://stackoverflow.com/questions/37517420/how-to-make-count-down-timer-in-java
+// alarm sound from
+// https://mixkit.co/free-sound-effects/alarm/
+// playSound from:
+// https://stackoverflow.com/a/17277981
