@@ -20,6 +20,7 @@ public class TimerGUI extends JFrame {
     private int secondsLeft = 0;
     private boolean flashWhite = true;
     private static boolean playSound = false;
+    private static Color alarmColor = Color.RED;
     public TimerGUI() {
 
         setTitle("Study Timer");
@@ -133,8 +134,22 @@ public class TimerGUI extends JFrame {
         menu.add(soundBtn);
         menu.add(new JSeparator());
         //menu.add(bellBtn);
-        //menu.add(new JSeparator());
-        menu.add(colorBtn);
+        menu.add(new JLabel("FlashColor:"));
+        String[] colors = {"Red", "Blue", "Yellow"};
+        var colorComboBox = new JComboBox<String>(colors);
+        colorComboBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) 
+            {
+                switch ((String) colorComboBox.getSelectedItem())
+                {
+                    case "Red" : alarmColor = Color.RED; break;
+                    case "Blue" : alarmColor = Color.BLUE; break;
+                    case "Yellow" : alarmColor = Color.YELLOW; break;
+                }
+            }
+        });
+        menu.add(colorComboBox);
+        //menu.add(colorBtn);
         menu.add(new JSeparator());
         menu.add(pictureBtn);
         menu.add(new JSeparator());      
@@ -179,7 +194,7 @@ public class TimerGUI extends JFrame {
     private void flashScreen() {
         breakFlash.setVisible(true);
         if (flashWhite) {
-            panel.setBackground(Color.RED);
+            panel.setBackground(alarmColor);
         } else {
             panel.setBackground(Color.WHITE);
         }
