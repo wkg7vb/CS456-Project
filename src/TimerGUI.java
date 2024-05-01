@@ -20,6 +20,8 @@ public class TimerGUI extends JFrame {
     private int secondsLeft = 0;
     private boolean flashWhite = true;
     private static boolean playSound = false;
+    private Color chosenColor = Color.red;
+
     public TimerGUI() {
 
         setTitle("Study Timer");
@@ -45,8 +47,6 @@ public class TimerGUI extends JFrame {
         hourSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 24, 1));
         minuteSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 59, 1));
         secondSpinner = new JSpinner(new SpinnerNumberModel(30, 0, 59, 1));
-
-        
 
         start = new JButton("START");
         start.setSize(new Dimension(400, 200));
@@ -92,12 +92,11 @@ public class TimerGUI extends JFrame {
         //System.exit(0);
     }
 
-    private static JPanel getjPanel() {
+    private JPanel getjPanel() {
         int iconSize = 30;
         var soundIcon = new ImageIcon(new ImageIcon("src/sound.png").getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
         var bellIcon = new ImageIcon(new ImageIcon("src/bell.png").getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
         var colorIcon = new ImageIcon(new ImageIcon("src/color.png").getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
-        var pictureIcon = new ImageIcon(new ImageIcon("src/picture.png").getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
 
         var soundBtn = new JButton(bellIcon);
         soundBtn.addActionListener(new ActionListener() {
@@ -115,15 +114,17 @@ public class TimerGUI extends JFrame {
 
             }
         });
-        //var bellBtn = new JButton(bellIcon);
+
         var colorBtn = new JButton(colorIcon);
-        /*colorBtn.addActionListener(new ActionListener() {
+
+        colorBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
-
+                chosenColor = JColorChooser.showDialog(null, "Select a color", chosenColor);
+                colorBtn.setBackground(chosenColor);
             }
-        });*/
-        var pictureBtn = new JButton(pictureIcon);
+        });
+
         var timerValue = new JTextField("25:00");
         timerValue.setPreferredSize(new Dimension(100,10));
         var timerReset = new JButton("Reset");
@@ -136,8 +137,6 @@ public class TimerGUI extends JFrame {
         //menu.add(new JSeparator());
         menu.add(colorBtn);
         menu.add(new JSeparator());
-        menu.add(pictureBtn);
-        menu.add(new JSeparator());      
 
         menu.setLayout(new BoxLayout(menu, BoxLayout.Y_AXIS));
         return menu;
@@ -179,13 +178,13 @@ public class TimerGUI extends JFrame {
     private void flashScreen() {
         breakFlash.setVisible(true);
         if (flashWhite) {
-            panel.setBackground(Color.RED);
+            panel.setBackground(chosenColor);
         } else {
             panel.setBackground(Color.WHITE);
         }
         flashWhite = !flashWhite; 
     }
-    
+
 
     private void playSound()
     {
