@@ -98,17 +98,17 @@ public class TimerGUI extends JFrame {
         var bellIcon = new ImageIcon(new ImageIcon("src/bell.png").getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
         var colorIcon = new ImageIcon(new ImageIcon("src/color.png").getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
 
-        var soundBtn = new JButton(bellIcon);
+        var soundBtn = new JButton(soundIcon);
         soundBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (playSound)
                 {
-                    soundBtn.setIcon(bellIcon);
+                    soundBtn.setIcon(soundIcon);
                     playSound = false;
                 }
                 else
                 {
-                    soundBtn.setIcon(soundIcon);
+                    soundBtn.setIcon(bellIcon);
                     playSound = true;
                 }
 
