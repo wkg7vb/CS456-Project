@@ -20,13 +20,8 @@ public class TimerGUI extends JFrame {
     private int secondsLeft = 0;
     private boolean flashWhite = true;
     private static boolean playSound = false;
-<<<<<<< HEAD
     private Color chosenColor = Color.red;
 
-=======
-    private static JLabel soundLabel;
-    private static Color alarmColor = Color.RED;
->>>>>>> fc8777fadadd6f55273031779584d8849a2711b8
     public TimerGUI() {
 
         setTitle("Study Timer");
@@ -83,7 +78,7 @@ public class TimerGUI extends JFrame {
         buttonPane.add(new JLabel("s     "));
         buttonPane.add(start);
         buttonPane.add(breakFlash);
-        
+
         panel.add(buttonPane, BorderLayout.SOUTH);
 
         JPanel menu = getjPanel();
@@ -103,36 +98,26 @@ public class TimerGUI extends JFrame {
         var bellIcon = new ImageIcon(new ImageIcon("src/bell.png").getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
         var colorIcon = new ImageIcon(new ImageIcon("src/color.png").getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
 
-        soundLabel = new JLabel("Sound: OFF");
-        var soundBtn = new JButton(soundIcon);
+        var soundBtn = new JButton(bellIcon);
         soundBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (playSound)
                 {
-                    soundBtn.setIcon(soundIcon);
+                    soundBtn.setIcon(bellIcon);
                     playSound = false;
-                    soundLabel.setText("Sound: OFF");
-
                 }
                 else
                 {
-                    soundBtn.setIcon(bellIcon);
+                    soundBtn.setIcon(soundIcon);
                     playSound = true;
-                    soundLabel.setText("Sound: ON");
                 }
 
             }
         });
-<<<<<<< HEAD
 
         var colorBtn = new JButton(colorIcon);
 
         colorBtn.addActionListener(new ActionListener() {
-=======
-        //var bellBtn = new JButton(bellIcon);
-        //var colorBtn = new JButton(colorIcon);
-        /*colorBtn.addActionListener(new ActionListener() {
->>>>>>> fc8777fadadd6f55273031779584d8849a2711b8
             public void actionPerformed(ActionEvent e)
             {
                 chosenColor = JColorChooser.showDialog(null, "Select a color", chosenColor);
@@ -146,26 +131,11 @@ public class TimerGUI extends JFrame {
 
         JPanel menu = new JPanel();
         menu.add(new JSeparator());
-        menu.add(soundLabel);
         menu.add(soundBtn);
         menu.add(new JSeparator());
         //menu.add(bellBtn);
-        menu.add(new JLabel("FlashColor:"));
-        String[] colors = {"Red", "Blue", "Yellow"};
-        var colorComboBox = new JComboBox<String>(colors);
-        colorComboBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) 
-            {
-                switch ((String) colorComboBox.getSelectedItem())
-                {
-                    case "Red" : alarmColor = Color.RED; break;
-                    case "Blue" : alarmColor = Color.BLUE; break;
-                    case "Yellow" : alarmColor = Color.YELLOW; break;
-                }
-            }
-        });
-        menu.add(colorComboBox);
-        //menu.add(colorBtn);
+        //menu.add(new JSeparator());
+        menu.add(colorBtn);
         menu.add(new JSeparator());
 
         menu.setLayout(new BoxLayout(menu, BoxLayout.Y_AXIS));
@@ -179,7 +149,7 @@ public class TimerGUI extends JFrame {
 
         timer = new Timer();
         secondsLeft = (((Integer) hourSpinner.getValue()) * 3600)
-            + (((Integer) minuteSpinner.getValue()) * 60) 
+            + (((Integer) minuteSpinner.getValue()) * 60)
             + (((Integer) secondSpinner.getValue()))  ; //CHANGED TO 5 SECONDS FOR TESTING
         time.setText(formatTime(secondsLeft));
 
@@ -201,18 +171,14 @@ public class TimerGUI extends JFrame {
             timer.cancel();
             timer = null;
             flashTimer.start();
-            
+
         }
     }
 
     private void flashScreen() {
         breakFlash.setVisible(true);
         if (flashWhite) {
-<<<<<<< HEAD
             panel.setBackground(chosenColor);
-=======
-            panel.setBackground(alarmColor);
->>>>>>> fc8777fadadd6f55273031779584d8849a2711b8
         } else {
             panel.setBackground(Color.WHITE);
         }
