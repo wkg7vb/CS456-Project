@@ -20,6 +20,7 @@ public class TimerGUI extends JFrame {
     private int secondsLeft = 0;
     private boolean flashWhite = true;
     private static boolean playSound = false;
+    private static JLabel soundLabel;
     private static Color alarmColor = Color.RED;
     public TimerGUI() {
 
@@ -100,24 +101,28 @@ public class TimerGUI extends JFrame {
         var colorIcon = new ImageIcon(new ImageIcon("src/color.png").getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
         var pictureIcon = new ImageIcon(new ImageIcon("src/picture.png").getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH));
 
-        var soundBtn = new JButton(bellIcon);
+        soundLabel = new JLabel("Sound: OFF");
+        var soundBtn = new JButton(soundIcon);
         soundBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (playSound)
                 {
-                    soundBtn.setIcon(bellIcon);
+                    soundBtn.setIcon(soundIcon);
                     playSound = false;
+                    soundLabel.setText("Sound: OFF");
+
                 }
                 else
                 {
-                    soundBtn.setIcon(soundIcon);
+                    soundBtn.setIcon(bellIcon);
                     playSound = true;
+                    soundLabel.setText("Sound: ON");
                 }
 
             }
         });
         //var bellBtn = new JButton(bellIcon);
-        var colorBtn = new JButton(colorIcon);
+        //var colorBtn = new JButton(colorIcon);
         /*colorBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
@@ -131,6 +136,7 @@ public class TimerGUI extends JFrame {
 
         JPanel menu = new JPanel();
         menu.add(new JSeparator());
+        menu.add(soundLabel);
         menu.add(soundBtn);
         menu.add(new JSeparator());
         //menu.add(bellBtn);
