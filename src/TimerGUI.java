@@ -13,6 +13,7 @@ public class TimerGUI extends JFrame {
 
     private JPanel panel;
     private JLabel time;
+    private JLabel workBreak;
     private JButton start, startOver, breakButton;
     private JSpinner workHourSpinner, workMinuteSpinner, workSecondSpinner;
     private JSpinner breakHourSpinner, breakMinuteSpinner, breakSecondSpinner;
@@ -43,6 +44,10 @@ public class TimerGUI extends JFrame {
         });
 
         // adding elements to panel
+        workBreak = new JLabel("Press Start");
+        workBreak.setFont(new Font("Serif", Font.BOLD, 100));
+        panel.add(workBreak, BorderLayout.BEFORE_FIRST_LINE);
+
         time = new JLabel("  00:30");
         time.setFont(new Font("Serif", Font.BOLD, 200));
         panel.add(time, BorderLayout.CENTER);
@@ -69,7 +74,9 @@ public class TimerGUI extends JFrame {
                 flashTimer.stop();
                 panel.setBackground(Color.WHITE);
                 breakFlash.setVisible(true);
-                stopTimer();
+                if (timer != null){
+                    timer.cancel();
+                }
             }
         });
         breakFlash.setVisible(true);
@@ -164,6 +171,8 @@ public class TimerGUI extends JFrame {
     }
 
     private void startWorkTimer(){
+        workBreak.setText("Work Time");
+
         if (timer != null){
             timer.cancel();
         }
@@ -187,6 +196,8 @@ public class TimerGUI extends JFrame {
     }
 
     private void startBreakTimer(){
+        workBreak.setText("Break Time!");
+
         if (timer != null){
             timer.cancel();
         }
@@ -215,7 +226,7 @@ public class TimerGUI extends JFrame {
             timer.cancel();
             timer = null;
             flashTimer.start();
-
+            workBreak.setText("Press Start");
         }
     }
 
