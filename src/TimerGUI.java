@@ -35,6 +35,7 @@ public class TimerGUI extends JFrame {
         //timer.schedule(new App(), 0, 1000);
 
         panel = new JPanel(new BorderLayout());
+        panel.setBackground(Color.WHITE);
 
         flashTimer = new javax.swing.Timer(300, new ActionListener() {
             @Override
@@ -144,6 +145,7 @@ public class TimerGUI extends JFrame {
         });
 
         var colorBtn = new JButton(colorIcon);
+        colorBtn.setBackground(chosenColor);
 
         colorBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
