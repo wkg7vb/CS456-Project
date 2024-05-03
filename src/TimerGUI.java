@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.GroupLayout.Alignment;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Timer;
@@ -12,7 +14,8 @@ public class TimerGUI extends JFrame {
     private JPanel panel;
     private JLabel time;
     private JButton start, startOver, breakButton;
-    private JSpinner hourSpinner, minuteSpinner, secondSpinner;
+    private JSpinner workHourSpinner, workMinuteSpinner, workSecondSpinner;
+    private JSpinner breakHourSpinner, breakMinuteSpinner, breakSecondSpinner;
     private JButton breakFlash;
     private Clip clip;
     private Timer timer;
@@ -44,9 +47,12 @@ public class TimerGUI extends JFrame {
         time.setFont(new Font("Serif", Font.BOLD, 200));
         panel.add(time, BorderLayout.CENTER);
 
-        hourSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 24, 1));
-        minuteSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 59, 1));
-        secondSpinner = new JSpinner(new SpinnerNumberModel(30, 0, 59, 1));
+        workHourSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 24, 1));
+        workMinuteSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 59, 1));
+        workSecondSpinner = new JSpinner(new SpinnerNumberModel(30, 0, 59, 1));
+        breakHourSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 24, 1));
+        breakMinuteSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 59, 1));
+        breakSecondSpinner = new JSpinner(new SpinnerNumberModel(30, 0, 59, 1));
 
         start = new JButton("START");
         start.setSize(new Dimension(400, 200));
@@ -68,18 +74,33 @@ public class TimerGUI extends JFrame {
         });
         breakFlash.setVisible(true);
 
-        JPanel buttonPane = new JPanel();
-        buttonPane.add(new JLabel("Set Time:"));
-        buttonPane.add(hourSpinner);
-        buttonPane.add(new JLabel("h"));
-        buttonPane.add(minuteSpinner);
-        buttonPane.add(new JLabel("m"));
-        buttonPane.add(secondSpinner);
-        buttonPane.add(new JLabel("s     "));
-        buttonPane.add(start);
-        buttonPane.add(breakFlash);
+        JPanel topSpinnerPanel = new JPanel();
+        topSpinnerPanel.add(new JLabel("Set Work Time:"));
+        topSpinnerPanel.add(workHourSpinner);
+        topSpinnerPanel.add(new JLabel("h"));
+        topSpinnerPanel.add(workMinuteSpinner);
+        topSpinnerPanel.add(new JLabel("m"));
+        topSpinnerPanel.add(workSecondSpinner);
+        topSpinnerPanel.add(new JLabel("s"));
+        topSpinnerPanel.add(start);
 
-        panel.add(buttonPane, BorderLayout.SOUTH);
+        JPanel bottomSpinnerPanel = new JPanel();        
+        bottomSpinnerPanel.add(new JSeparator());
+        bottomSpinnerPanel.add(new JLabel("Set Break Time:"));
+        bottomSpinnerPanel.add(breakHourSpinner);
+        bottomSpinnerPanel.add(new JLabel("h"));
+        bottomSpinnerPanel.add(breakMinuteSpinner);
+        bottomSpinnerPanel.add(new JLabel("m"));
+        bottomSpinnerPanel.add(breakSecondSpinner);
+        bottomSpinnerPanel.add(new JLabel("s"));
+        bottomSpinnerPanel.add(breakFlash);
+
+
+
+        JPanel spinnerPanel = new JPanel(new GridLayout(2,1));
+        spinnerPanel.add(topSpinnerPanel);
+        spinnerPanel.add(bottomSpinnerPanel);
+        panel.add(spinnerPanel, BorderLayout.SOUTH);
 
         JPanel menu = getjPanel();
 
@@ -148,9 +169,9 @@ public class TimerGUI extends JFrame {
         }
 
         timer = new Timer();
-        secondsLeft = (((Integer) hourSpinner.getValue()) * 3600)
-            + (((Integer) minuteSpinner.getValue()) * 60)
-            + (((Integer) secondSpinner.getValue()))  ; //CHANGED TO 5 SECONDS FOR TESTING
+        secondsLeft = (((Integer) workHourSpinner.getValue()) * 3600)
+            + (((Integer) workMinuteSpinner.getValue()) * 60)
+            + (((Integer) workSecondSpinner.getValue()))  ; //CHANGED TO 5 SECONDS FOR TESTING
         time.setText(formatTime(secondsLeft));
 
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -171,7 +192,9 @@ public class TimerGUI extends JFrame {
         }
 
         timer = new Timer();
-        secondsLeft = 5*60;
+        secondsLeft = (((Integer) breakHourSpinner.getValue()) * 3600)
+            + (((Integer) breakMinuteSpinner.getValue()) * 60)
+            + (((Integer) breakSecondSpinner.getValue()))  ; //CHANGED TO 5 SECONDS FOR TESTING
         time.setText(formatTime(secondsLeft));
 
         timer.scheduleAtFixedRate(new TimerTask() {
